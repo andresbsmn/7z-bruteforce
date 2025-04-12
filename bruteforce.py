@@ -19,7 +19,13 @@ def open_wordlist(wordlist_path):
 
 def move_cursor(line, col=0):
     print(f"\033[{line};{col}H", end="")
-
+    
+def clear_screen():
+    if platform.system() == "Windows":
+        os.system("cls")
+    else:
+        os.system("clear")
+        
 def progress(itteratie, totaal):
     percentage = (itteratie / totaal) * 100
     bar_length = 40
@@ -81,13 +87,12 @@ def try_passwords_multithreaded(zipfile, wordlist, thread_id):
                 print(f"Onverwachte fout: {e}")
                 return
 # Voer uit
-if __name__ == "__main__":
+def main():
     if not Path(zipFile_path).exists():
         print(f"Bestand niet gevonden: {zipFile_path}")
     elif not Path(wordlist_path).exists():
         print(f"Woordlijst niet gevonden: {wordlist_path}")
     else:
-        found_event = Event()
         wordlist = open_wordlist(wordlist_path)
 
         num_threads = os.cpu_count()
@@ -100,6 +105,8 @@ if __name__ == "__main__":
         chunk_size = len(wordlist) // num_threads
         threads = []
         print(f" # of threads: {num_threads}, wordlist size: {len(wordlist)}, chunk size: {chunk_size} \n")
+        input("press enter to continue...")
+        clear_screen()
         for i in range(num_threads):
             # made sure that the last thread gets the remaining passwords
             # even if it is not divisible by num_threads
@@ -112,3 +119,11 @@ if __name__ == "__main__":
 
         for t in threads:
             t.join()
+
+if __name__ == "__main__":
+    found_event = Event()
+    clear_screen
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("exiting...")
