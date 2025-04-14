@@ -6,12 +6,6 @@ found_event = Event()
 
 def get_os():
     return os.name
-
-def clear():
-    if os.name == "posix":
-        return os.system ("clear")
-    elif os.name == "ce" or os.name == "nt" or os.name == "dos":
-        return os.system ("cls")
     
 def move_cursor(line, col=0):
     print(f'\033[{line};{col}H', end='')
@@ -182,7 +176,7 @@ def main():
         exit(0)
 
 if __name__ == '__main__':
-    clear()
+    clear_screen()
     try:
         main()
     finally:
